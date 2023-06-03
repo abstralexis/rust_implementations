@@ -5,9 +5,11 @@
 
 mod linked_list;
 mod subfolder;
+mod binary_tree;
 
 use linked_list::{cons::*, singly_linked_list::*};
 use subfolder::hello::hello_world;
+use binary_tree::binary_tree::*;
 
 fn main() {
     println!("Hello, world!");
@@ -30,4 +32,7 @@ fn main() {
     };
     println!("Singly Linked List (Stack) | {:?}", &singly_linked);
     println!("Popped Value | {:?}", &popped);
+
+    let mut tree: Tree<i32> = Tree::new();
+    println!("{:?}", &tree);
 }
