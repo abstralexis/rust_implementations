@@ -17,8 +17,8 @@
 /// let popped = match list.pop() {
 ///     None => panic!(),
 ///     Some(val) => val,
-/// } // Pops the value and handles the `Option`.
-/// println!("{:?}", &popped) // Prints 20
+/// }; // Pops the value and handles the `Option`.
+/// println!("{:?}", &popped); // Prints 20
 /// ```
 #[derive(Debug, Clone)]
 pub struct List<T>
@@ -59,7 +59,7 @@ where
     /// Pushes `val` onto the head of the `List`.
     /// # Example
     /// ```
-    /// let list: List<i32> = List::new().push(10) // Creates a new `List` and pushes 10.
+    /// let list: List<i32> = List::new().push(10); // Creates a new `List` and pushes 10.
     /// ```
     pub fn push(&mut self, val: T) -> Self {
         // To push, we need to have a new node.
@@ -90,8 +90,8 @@ where
     /// let popped = match list.pop() {
     ///     None => panic!(),
     ///     Some(val) => val,
-    /// } // Pops the value and handles the `Option`.
-    /// println!("{:?}", &popped) // Prints 20
+    /// }; // Pops the value and handles the `Option`.
+    /// println!("{:?}", &popped); // Prints 20
     /// ```
     pub fn pop(&mut self) -> Option<T> {
         // Take the old head - make it `None` and then return the node out of it.
