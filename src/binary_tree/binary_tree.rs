@@ -6,7 +6,10 @@ pub struct InvalidPathError;
 impl Error for InvalidPathError {}
 impl Display for InvalidPathError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Invalid path - is the path too long to traverse this tree?")
+        write!(
+            f,
+            "Invalid path - is the path too long to traverse this tree?"
+        )
     }
 }
 
@@ -20,7 +23,10 @@ impl Display for HeadlessError {
 }
 
 #[derive(Debug, Clone)]
-pub struct Tree<T> where T: Clone {
+pub struct Tree<T>
+where
+    T: Clone,
+{
     head: Branch<T>,
 }
 
@@ -33,18 +39,17 @@ pub struct Node<T> {
     children: (Branch<T>, Branch<T>),
 }
 
-impl<T> Tree<T> where T: Clone {
+impl<T> Tree<T>
+where
+    T: Clone,
+{
     pub fn new() -> Self {
         Self {
-            head: Some(
-                Box::new(
-                    Node {
-                        value: None,
-                        parent: None,
-                        children: (None, None),
-                    }
-                )
-            ),
+            head: Some(Box::new(Node {
+                value: None,
+                parent: None,
+                children: (None, None),
+            })),
         }
     }
 

@@ -3,13 +3,15 @@
 //! at some point, and execute each manually through the terminal, however I opted to
 //! go with this for simplicity. I also know it better.
 
-mod linked_list;
-mod subfolder;
 mod binary_tree;
+mod linked_list;
+mod queues;
+mod subfolder;
 
-use linked_list::{cons::*, singly_linked_list::*};
-use subfolder::hello::hello_world;
 use binary_tree::binary_tree::*;
+use linked_list::{cons::*, singly_linked_list::*};
+use queues::*;
+use subfolder::hello::hello_world;
 
 fn main() {
     println!("Hello, world!");
