@@ -48,29 +48,29 @@ impl<T> Tree<T> where T: Clone {
         }
     }
 
-    pub fn traverse(&mut self, path: &Vec<bool>) -> Result<&mut Node<T>, Box::<dyn Error>> {
-        let mut curr = match &mut self.head {
-            Some(c) => c,
-            None => return Err(Box::new(HeadlessError)),
-        };
+    // pub fn traverse(&mut self, path: &Vec<bool>) -> Result<&mut Node<T>, Box::<dyn Error>> {
+    //     let mut curr = match &mut self.head {
+    //         Some(c) => c,
+    //         None => return Err(Box::new(HeadlessError)),
+    //     };
 
-        path.iter()
-            .map(
-                |traversal|
-                Ok(
-                    match traversal {
-                        true => match curr.clone().children.1 {
-                            Some(mut child) => curr = &mut child,
-                            None => return Err(Box::new(InvalidPathError)),
-                        },
-                        false => match curr.clone().children.0 {
-                            Some(mut child) => curr = &mut child,
-                            None => return Err(Box::new(InvalidPathError))
-                        },
-                    }
-                )
-            );
+    //     path.iter()
+    //         .map(
+    //             |traversal|
+    //             Ok(
+    //                 match traversal {
+    //                     true => match curr.clone().children.1 {
+    //                         Some(mut child) => curr = &mut child,
+    //                         None => return Err(Box::new(InvalidPathError)),
+    //                     },
+    //                     false => match curr.clone().children.0 {
+    //                         Some(mut child) => curr = &mut child,
+    //                         None => return Err(Box::new(InvalidPathError))
+    //                     },
+    //                 }
+    //             )
+    //         );
 
-        Ok(&mut curr)
-    }
+    //     Ok(&mut curr)
+    // }
 }
