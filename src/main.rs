@@ -3,6 +3,8 @@
 //! at some point, and execute each manually through the terminal, however I opted to
 //! go with this for simplicity. I also know it better.
 
+use anyhow;
+
 mod binary_tree;
 mod linked_list;
 mod queues;
@@ -10,10 +12,12 @@ mod subfolder;
 
 use binary_tree::binary_tree::*;
 use linked_list::{cons::*, singly_linked_list::*};
-use queues::*;
+use queues::linear::LinearQueue;
 use subfolder::hello::hello_world;
 
-fn main() {
+use crate::queues::linear;
+
+fn main() -> anyhow::Result<()> {
     println!("Hello, world!");
     hello_world();
     // hello_linked(); // Uncommenting would require uncommenting in the file too.
@@ -37,4 +41,14 @@ fn main() {
 
     let mut tree: Tree<i32> = Tree::new();
     println!("{:?}", &tree);
+
+    let mut linear_queue: LinearQueue<i32> = LinearQueue::new(10);
+    linear_queue.enqueue(1)?;
+    linear_queue.enqueue(2)?;
+    linear_queue.enqueue(3)?;
+    dbg!(linear_queue.dequeue()?);
+    linear_queue.enqueue(4)?;
+    dbg!(linear_queue);
+
+    Ok(())
 }
