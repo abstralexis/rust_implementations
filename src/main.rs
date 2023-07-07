@@ -9,6 +9,7 @@ mod binary_tree;
 mod linked_list;
 mod queues;
 mod subfolder;
+mod stacks;
 
 use binary_tree::binary_tree::*;
 use linked_list::{cons::*, singly_linked_list::*};
