@@ -15,6 +15,7 @@ use binary_tree::binary_tree::*;
 use linked_list::{cons::*, singly_linked_list::*};
 use queues::linear::LinearQueue;
 use subfolder::hello::hello_world;
+use stacks::stack::Stack;
 
 use crate::queues::linear;
 
@@ -50,6 +51,17 @@ fn main() -> anyhow::Result<()> {
     dbg!(linear_queue.dequeue()?);
     linear_queue.enqueue(4)?;
     dbg!(linear_queue);
+
+    let mut stack: Stack<i32> = Stack::new(&3_usize);
+    println!("Peek new stack | {:?}", &stack.peek());
+    stack.push(&1_i32)?;
+    stack.push(&2_i32)?;
+    println!("Peek stack after push 1, 2 | {:?}", &stack.peek());
+    stack.push(&3_i32)?;
+    println!("Push another item, is empty? | {:?}", &stack.is_empty());
+    println!("Is full? | {:?}", &stack.is_full());
+    println!("Pop the stack | {:?}", &stack.pop());
+    dbg!(&stack);
 
     Ok(())
 }
