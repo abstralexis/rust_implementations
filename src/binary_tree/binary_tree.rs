@@ -1,5 +1,7 @@
 use std::error::Error;
+use std::cell::RefCell;
 use std::fmt::Display;
+use anyhow;
 
 #[derive(Debug)]
 pub struct InvalidPathError;
@@ -53,29 +55,29 @@ where
         }
     }
 
-    // pub fn traverse(&mut self, path: &Vec<bool>) -> Result<&mut Node<T>, Box::<dyn Error>> {
-    //     let mut curr = match &mut self.head {
+    // pub fn traverse(&mut self, path: &Vec<bool>) -> anyhow::Result<&mut Node<T>> {
+    //     let mut curr = RefCell::from(match &mut self.head {
     //         Some(c) => c,
-    //         None => return Err(Box::new(HeadlessError)),
-    //     };
+    //         None => return Err(HeadlessError.into()),
+    //     });
 
     //     path.iter()
     //         .map(
     //             |traversal|
     //             Ok(
     //                 match traversal {
-    //                     true => match curr.clone().children.1 {
-    //                         Some(mut child) => curr = &mut child,
+    //                     true => match curr.get_mut().clone().children.1 {
+    //                         Some(mut child) => curr = RefCell::from(&mut child),
     //                         None => return Err(Box::new(InvalidPathError)),
     //                     },
-    //                     false => match curr.clone().children.0 {
-    //                         Some(mut child) => curr = &mut child,
+    //                     false => match curr.get_mut().clone().children.0 {
+    //                         Some(mut child) => curr = RefCell::from(&mut child),
     //                         None => return Err(Box::new(InvalidPathError))
     //                     },
     //                 }
     //             )
     //         );
 
-    //     Ok(&mut curr)
+    //     Ok(curr.into_inner())
     // }
 }
