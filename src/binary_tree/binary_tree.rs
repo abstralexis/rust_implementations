@@ -1,83 +1,68 @@
 use std::error::Error;
-use std::cell::RefCell;
 use std::fmt::Display;
-use anyhow;
+use std::rc::Rc;
+use anyhow::Result;
 
-#[derive(Debug)]
-pub struct InvalidPathError;
-impl Error for InvalidPathError {}
-impl Display for InvalidPathError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "Invalid path - is the path too long to traverse this tree?"
-        )
-    }
-}
+pub type NodeRef<T> = Rc<Box<Node<T>>>;
 
-#[derive(Debug)]
-pub struct HeadlessError;
-impl Error for HeadlessError {}
-impl Display for HeadlessError {
+#[derive(Debug, Clone, Copy)]
+pub struct TooManyChildren {}
+impl Error for TooManyChildren {}
+impl Display for TooManyChildren {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Tree is headless.")
+        write!(f, "This Node has too mant children.")
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct Tree<T>
-where
-    T: Clone,
-{
-    head: Branch<T>,
+pub struct BTree<T: Default> {
+    pub root: Option<NodeRef<T>>,
 }
 
-type Branch<T> = Option<Box<Node<T>>>;
+impl<T: Default + Copy> BTree<T> {
+    pub fn new() -> Self {
+        Self { root: Some(Rc::new(Box::new(Node::new()))) }
+    }
+
+    pub fn traverse(self, path: &bool) -> Option<NodeRef<T>> {
+        match self.root {
+            Some(root) => match path {
+                true => return root.children.1.clone(),
+                false => return root.children.0.clone(),
+            }, 
+            None => return None
+        }
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct Node<T> {
-    value: Option<T>,
-    parent: Branch<T>,
-    children: (Branch<T>, Branch<T>),
+    pub item: T,
+    pub parent: Option<NodeRef<T>>,
+    pub children: (Option<NodeRef<T>>, Option<NodeRef<T>>),
 }
 
-impl<T> Tree<T>
-where
-    T: Clone,
-{
+impl<T: Default + Copy> Node<T> {
     pub fn new() -> Self {
-        Self {
-            head: Some(Box::new(Node {
-                value: None,
-                parent: None,
-                children: (None, None),
-            })),
-        }
+        Self { item: T::default(), parent: None, children: (None, None) }
     }
 
-    // pub fn traverse(&mut self, path: &Vec<bool>) -> anyhow::Result<&mut Node<T>> {
-    //     let mut curr = RefCell::from(match &mut self.head {
-    //         Some(c) => c,
-    //         None => return Err(HeadlessError.into()),
-    //     });
+    pub fn create_child(&mut self, path: &bool, value: &T) -> Result<()> {
+                let mut child: Node<T> = Node::new();
+                child.parent = Some(Rc::new(Box::new(*self)));
+                child.item = *value;
+                        
+                match path {
+                    true => match self.children {
+                        (_, None) => self.children.1 = Some(Rc::new(Box::new(child))),
+                        _ => return Err(TooManyChildren{}.into()),
+                    }
+                    false => match self.children {
+                        (None, _) => self.children.0 = Some(Rc::new(Box::new(child))),
+                        _ => return Err(TooManyChildren{}.into())
+                    }
+                }
 
-    //     path.iter()
-    //         .map(
-    //             |traversal|
-    //             Ok(
-    //                 match traversal {
-    //                     true => match curr.get_mut().clone().children.1 {
-    //                         Some(mut child) => curr = RefCell::from(&mut child),
-    //                         None => return Err(Box::new(InvalidPathError)),
-    //                     },
-    //                     false => match curr.get_mut().clone().children.0 {
-    //                         Some(mut child) => curr = RefCell::from(&mut child),
-    //                         None => return Err(Box::new(InvalidPathError))
-    //                     },
-    //                 }
-    //             )
-    //         );
-
-    //     Ok(curr.into_inner())
-    // }
-}
+        Ok(())
+    }
+} 

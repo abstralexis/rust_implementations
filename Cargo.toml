@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.71"
+color-eyre = "0.6.2"

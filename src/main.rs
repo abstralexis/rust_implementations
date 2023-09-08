@@ -17,7 +17,7 @@ use queues::linear::LinearQueue;
 use subfolder::hello::hello_world;
 use stacks::stack::Stack;
 
-use crate::queues::linear;
+use crate::queues::linear::*;
 
 fn main() -> anyhow::Result<()> {
     println!("Hello, world!");
@@ -41,12 +41,14 @@ fn main() -> anyhow::Result<()> {
     println!("Singly Linked List (Stack) | {:?}", &singly_linked);
     println!("Popped Value | {:?}", &popped);
 
-    let mut tree: Tree<i32> = Tree::new();
-    println!("{:?}", &tree);
+    let mut tree: BTree<i32> = BTree::new();
+    match tree.root {
+        Some(node) => node.create_child(&false, &3_i32),
+        None => panic!()
+    };
+    dbg!(&tree);
 
-    let mut linear_queue: LinearQueue<i32> = LinearQueue::new(10);
-    linear_queue.enqueue(1)?;
-    linear_queue.enqueue(2)?;
+    let mut linear_queue = LinearQueue::new(10usize);
     linear_queue.enqueue(3)?;
     dbg!(linear_queue.dequeue()?);
     linear_queue.enqueue(4)?;
