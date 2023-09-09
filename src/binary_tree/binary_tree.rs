@@ -1,9 +1,9 @@
 use std::error::Error;
 use std::fmt::Display;
-use std::rc::Rc;
+use std::cell::RefCell;
 use anyhow::Result;
 
-pub type NodeRef<T> = Rc<Box<Node<T>>>;
+pub type NodeRef<T> = RefCell<Box<Node<T>>>;
 
 #[derive(Debug, Clone, Copy)]
 pub struct TooManyChildren {}
@@ -21,14 +21,14 @@ pub struct BTree<T: Default> {
 
 impl<T: Default + Copy> BTree<T> {
     pub fn new() -> Self {
-        Self { root: Some(Rc::new(Box::new(Node::new()))) }
+        Self { root: Some(RefCell::new(Box::new(Node::new()))) }
     }
 
     pub fn traverse(self, path: &bool) -> Option<NodeRef<T>> {
         match self.root {
             Some(root) => match path {
-                true => return root.children.1.clone(),
-                false => return root.children.0.clone(),
+                true => return root.into_inner().children.1.clone(),
+                false => return root.into_inner().children.0.clone(),
             }, 
             None => return None
         }
@@ -49,16 +49,16 @@ impl<T: Default + Copy> Node<T> {
 
     pub fn create_child(&mut self, path: &bool, value: &T) -> Result<()> {
                 let mut child: Node<T> = Node::new();
-                child.parent = Some(Rc::new(Box::new(*self)));
+                child.parent = Some(RefCell::new(Box::new(self.clone() /*lord forgive me*/ )));
                 child.item = *value;
                         
                 match path {
                     true => match self.children {
-                        (_, None) => self.children.1 = Some(Rc::new(Box::new(child))),
+                        (_, None) => self.children.1 = Some(RefCell::new(Box::new(child))),
                         _ => return Err(TooManyChildren{}.into()),
                     }
                     false => match self.children {
-                        (None, _) => self.children.0 = Some(Rc::new(Box::new(child))),
+                        (None, _) => self.children.0 = Some(RefCell::new(Box::new(child))),
                         _ => return Err(TooManyChildren{}.into())
                     }
                 }

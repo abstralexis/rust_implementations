@@ -43,7 +43,11 @@ fn main() -> anyhow::Result<()> {
 
     let mut tree: BTree<i32> = BTree::new();
     match tree.root {
-        Some(node) => node.create_child(&false, &3_i32),
+        Some(ref node) => {
+            node.borrow_mut().item = 1_i32;
+            node.borrow_mut().create_child(&false, &2_i32)?;
+            node.borrow_mut().create_child(&true, &3_i32)?;
+        },
         None => panic!()
     };
     dbg!(&tree);
